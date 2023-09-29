@@ -34,3 +34,60 @@
                 - (주의) cv2.imread()는 잘못된 경로로 읽어도 NoneType으로 들어갈 뿐, 오류를 발생하지 않음
             - 이미지 쓰기
                 - cv2.imwrite()
+
+- 이미지 선 긋기
+
+| 파라미터 | 설명 |
+|---------|------|
+| img     | 그림을 그릴 이미지 파일 |
+|star|시작 좌표|
+|end|종료 좌표|
+|color|BGR형태의 Color(e,g,(255,0)->Blue)|
+|thickness(int)|선의 두께(pixel)|
+
+- 사각형 그리기
+
+| 파라미터 | 설명 |
+|---------|------|
+| img     | 그림을 그릴 이미지 파일 |
+|star|시작 좌표|
+|end|종료 좌표|
+|color|BGR형태의 Color(e,g,(255,0,0)->Blue)|
+|thickness(int)|선의 두께(pixel)|
+
+- 원 그리기
+
+| 파라미터 | 설명 |
+|---------|------|
+| img     | 그림을 그릴 이미지 파일 |
+|centenr|원의 중심 좌표(x,y)|
+|radian|반지름|
+|color|BGR형태의 Color|
+|thickness(int)|선의 두께, -1이면 원 안쪽을 채움|
+|lineType|선의 형태, cv2.line()함수의 인수와 동일|
+|shift|좌표에 대한 비트 시프트 연산|
+
+- 타원 그리기
+
+| 파라미터 | 설명 |
+|---------|------|
+| img     | 그림을 그릴 이미지 파일 |
+|centenr|타원의 중심 좌표(x,y)|
+|axes|중심에서 가장 큰 거리와 작은 거리|
+|angle|타원의 기울기 각|
+|startAngle|타원의 시작 각도|
+|endAngle|타원의 끝나는 각도|
+|color|색상|
+|thickness|선의 두께, -1이면 안쪽 채움|
+|lineType|선의 형태|
+|shift|좌표에 대한 비트 시프트|
+
+- 다각형 그리기
+
+| 파라미터 | 설명 |
+|---------|------|
+| img     | 그림을 그릴 이미지 파일 |
+|pts(array)|연결할 꼭지점 좌표|
+|isClosed|닫힌 도형 여부(True,False)|
+|color|색상|
+|thickness|선 두께|

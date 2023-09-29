@@ -149,3 +149,62 @@ plt.show()
 
 # %%
 ### 이미지 쓰기
+random_image = np.random.randint(0,256, size=(200,200,3))
+print(random_image.shape)
+# %%
+outpath = './random_image.png'
+cv2.imwrite(outpath,random_image)
+# %%
+my_img = cv2.imread('./random_image.png')
+# %%
+print(type(my_img))
+print(my_img.shape)
+# %%
+cv2.imshow('', my_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# %% 랜덤 그림 !!!
+img = np.zeros((512,512,3),np.uint8)
+# %%
+plt.imshow(img)
+plt.show()
+# %% 선긋기!!!
+img = cv2.line(img,(0,0),(511,511),(255,0,0),5)
+plt.imshow(img)
+plt.show()
+# %% 사각형 그리기!!!
+img = cv2.rectangle(img,(400,0),(510,128),(0,255,0),3)
+plt.imshow(img)
+plt.show()
+# %% 원 그리기!!!
+img = cv2.circle(img,(450,50),50,(0,0,255),-1)
+plt.imshow(img)
+plt.show()
+# %%
+img = cv2.circle(img,(50,450),50,(0,255,255),2)
+plt.imshow(img)
+plt.show()
+# %% 타원 그리기!!!
+img = cv2.ellipse(img,(256,256),(150,30),0,0,180,(0,255,0),-1)
+plt.imshow(img)
+plt.show()
+# %%
+img = cv2.ellipse(img,(256,256),(150,30),45,0,360,(255,255,255),2)
+plt.imshow(img)
+plt.show()
+# %%
+img = cv2.ellipse(img,(256,256),(150,10),135,0,270,(0,0,255),2)
+plt.imshow(img)
+plt.show()
+# %%다각형 그리기!!!
+pts = np.array([[10,5],[20,30],[70,20],[50,10]],np.int32)
+print(pts.shape)
+# %%
+pts = pts.reshape(-1,2,1)
+print(pts.shape)
+img = cv2.polylines(img,[pts],True,(0,150,250),4)
+# %%
+plt.imshow(img)
+plt.show()
+# %%
