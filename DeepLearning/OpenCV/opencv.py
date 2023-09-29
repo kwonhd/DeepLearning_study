@@ -208,3 +208,18 @@ img = cv2.polylines(img,[pts],True,(0,150,250),4)
 plt.imshow(img)
 plt.show()
 # %%
+pts2 = np.array([[150,5],[200,30],[100,70],[50,200]],np.int32)
+print(pts2.shape)
+#%%
+pts2 = pts2.reshape(-1,1,2)
+print(pts2.shape)
+img=cv2.polylines(img,[pts2],True,(172,200,255),4)
+# %%
+plt.imshow(img)
+plt.show()
+# %%텍스트 그리기!!!
+img = cv2.putText(img,'OpenCV',(10,500),cv2.FONT_HERSHEY_SIMPLEX,4,(255,255,255),3)
+# %%
+plt.imshow(img)
+plt.show()
+# %% 컬러 매핑!!!@@@!!!

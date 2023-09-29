@@ -91,3 +91,31 @@
 |isClosed|닫힌 도형 여부(True,False)|
 |color|색상|
 |thickness|선 두께|
+
+- 텍스트 그리기
+
+| 파라미터 | 설명 |
+|---------|------|
+| img     | 그림을 그릴 이미지 파일 |
+|text|표시할 문자열|
+|org|문자열이 표시될 위치, 문자열의 bottom-left corner 점|
+|fontFace|폰트타입. cv2.font_xxx|
+|fontScale|폰트크기|
+|color|폰트색상|
+|thickness|글자의 굵기|
+|lineType|글자 선의 형태|
+|bottomLeftOrign|영상의 원점 좌표 설정(True:최하단, False:최상단)|
+
+- 문자열 폰트 옵션
+
+|옵션|값|설명|
+|-------|-------|-------|
+|cv2.FONT_HERSHEY_SIMPLEX	    |0|	중간 크기 산세리프 폰트|
+|cv2.FONT_HERSHEY_PLAIN	        |1|	작은 크기 산세리프 폰트|
+|cv2.FONT_HERSHEY_DUPLEX	    |2|	2줄 산세리프 폰트|
+|cv2.FONT_HERSHEY_COMPLEX	    |3|	중간 크기 세리프 폰트|
+|cv2.FONT_HERSHEY_TRIPLEX	    |4|	3줄 세리프 폰트|
+|cv2.FONT_HERSHEY_COMPLEX_SMALL	|5|	COMPLEX 보다 작은 크기|
+|cv2.FONT_HERSHEY_SCRIPT_SIMPLEX|6|	필기체 스타일 폰트|
+|cv2.FONT_HERSHEY_SCRIPT_COMPLEX|7|복잡한 필기체 스타일|
+|cv2.FONT_ITALIC	            |16|	이탤릭체를 위한 플래그|
