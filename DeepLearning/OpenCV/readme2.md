@@ -127,3 +127,83 @@
         - 즉, 이미지를 작은 tile형태로 나누어 그 tile안에서 Equalization을 적용하는 방식
         - 작은 영역이다 보니 작은 노이즈(극단적으로 어둡거나, 밝은 영역)가 있으면 이것이 반영이 되어 원하는 결과를 얻을 수 없게 됨
         - 이 문제를 피하기 위해서 contrast limit라는 값을 적용하여 이 값을 넘어가는 경우는 그 영역은 다른 영역에 균일하게 배분하여 적용
+
+# 2D Histogram : cv2.calcHist()
+
+    - 지금까지 Histogram은 1차원으로 grayscale 이미지의 pixel의 강도, 즉 빛의 세기를 분석한 결과
+    - 2D Histogram은 Color 이미지의 Hue(색상) & Saturation(채도)을 동시에 분석하는 방법
+    - 색상과 채도를 분석하기 때문에 HSV Format으로 변환해야 함
+
+|파라미터|설명|
+|-------|-------|
+|image|HSV로 변환된 이미지|
+|channel|0-> Hue, 1-> Saturation|
+|bins|	[180,256] 첫번째는 Hue, 두번째는 Saturation|
+|range|	[0,180,0,256] Hue(0~180), Saturation(0,256)|
+
+# 이미지 처리
+    - 필요에 따라 적절한 처리
+    - resize(), flip(), getAffineTransform(), warpAffine() 등 다양한 메서드 존재
+
+    # Resize
+    cv2.resize()
+        - 사이즈가 변하면 pixel사이의 값을 결정을 해야함
+        - 보간법(Interpolation method)
+        - 사이즈를 줄일 때 : cv2.INTER_AREA
+        - 사이즈를 크게 할 때 : cv2.INTER_CUBIC , cv2.INTER_LINEAR
+
+|파라미터|설명|
+|-------|-------|
+|img|Image|
+|dsize|	Manual Size, 가로, 세로 형태의 tuple(e.g., (100,200))|
+|fx|	가로 사이즈의 배수, 2배로 크게하려면 2. 반으로 줄이려면 0.5|
+|fy|	세로 사이즈의 배수|
+|interpolation|	보간법|
+
+# Translation : cv2.warpAffine()
+    - 이미지의 위치를 변경
+|파라미터|설명|
+|-------|-------|
+|src|Image|
+|M|변환 행렬|
+|dsize (tuple)|output image size(e.g., (width=columns, height=rows)|
+
+
+# Rotate : cv2.getRotationMatrix2D()
+    - 물체를 평면상의 한 점을 중심으로 𝜃 만큼 회전하는 변환
+    - 양의 각도는 시계반대방향으로 회전
+
+|파라미터|설명|
+|-------|-------|
+|center|	이미지의 중심 좌표|
+|angle|	회전 각도|
+|scale|	scale factor|
+
+# Flip : cv2.flip()
+    - 대칭 변환
+        - 좌우 대칭 (좌우 반전)
+        - 상하 대칭 (상하 반전)
+    - 입력 영상과 출력 영상의 픽셀이 1:1 매칭이므로 보간법이 필요 없음
+
+|파라미터|설명|
+|-----|-----|
+|src|입력 영상|
+|flipCode|대칭 방법을 결정하는 flag 인자, 양수이면 좌우 대칭, 0이면 상하 대칭, 음수이면 상하, 좌우 대칭을 모두 실행|
+
+# Affine Transformation : cv2.getAffineTransform()
+
+    - 선의 평행선은 유지되면서 이미지를 변환하는 작업
+    - 이동, 확대, Scale, 반전까지 포함된 변환
+    - Affine 변환을 위해서는 3개의 Match가 되는 점이 있으면 변환행렬을 구할 수 있음
+
+#Perspective Transformation
+    - Perspective(원근법) 변환
+    - 직선의 성질만 유지, 선의 평행성은 유지가 되지 않는 변환
+    - 기차길은 서로 평행하지만 원근변환을 거치면 평행성은 유지 되지 못하고 하나의 점에서 만나는 것 처럼 보임 (반대의 변환도 가능)
+    - 4개의 Point의 Input값과 이동할 output Point 가 필요
+    - cv2.getPerspectiveTransform()가 필요하며, cv2.warpPerspective() 함수에 변환행렬값을 적용하여 최종 결과 이미지를 얻을 수 있음
+    - 좌표점은 (왼쪽 위)→(오른쪽 위)→(오른쪽 아래)→(왼쪽 아래)
+
+#이미지 ROI
+    - 이미지 작업시에는 특정 pixel단위 보다는 특정 영역단위로 작업을 하게 되는데 이것을 Region of Image(ROI)라고 함
+    - ROI 설정은 Numpy의 indexing을 사용, 특정 영역을 copy 할 수도 있음
