@@ -765,3 +765,307 @@ for i in range(6):
     
 plt.show()
 # %%
+img = cv2.imread('./letters.jpg',0)
+# %%
+ret, th1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+# %%
+thr2 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,15,2)
+thr3 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,15,2)
+# %%
+titles = ['original', 'global','mean','gaussian']
+images = [img,th1,thr2,thr3]
+# %%
+plt.figure(figsize=(14,10))
+for i in range(4):
+    plt.subplot(2,2,i+1)
+    plt.imshow(images[i],cmap='gray')
+    plt.title(titles[i])
+    plt.xticks([])
+    plt.yticks([])
+    
+plt.show()
+# %%
+url = 'https://cdn.pixabay.com/photo/2017/01/04/13/09/star-1951963_960_720.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('noise.jpg')
+# %%
+img = cv2.imread('./image/noise.jpg',0)
+img.shape
+# %%
+ret1, th1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY) #임계값 전체적용
+ret2, th2 = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU) # 옥수방식
+blur = cv2.GaussianBlur(img,(5,5),0) # 흐릿하게
+ret3, th3 = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+# %%
+images = [img,0,th1,img,0,th2,blur,0,th3] # 0 = 히스토그램
+titles = ['Original','Histogram','Global Tresholding (t=127)',
+          'Original','Histogram','Otsu Tresholding',
+          'Gaussian','Histogram','Otsu Tresholding']
+# %%
+plt.figure(figsize=(14,10))
+for i in range(3):
+    plt.subplot(3,3,i*3+1)
+    plt.imshow(images[i*3],cmap = 'gray')
+    plt.title(titles[i*3])
+    plt.xticks([])
+    plt.yticks([])
+    
+    plt.subplot(3,3,i*3+2)
+    plt.hist(images[i*3].ravel(),256)
+    plt.title(titles[i*3+1])
+    plt.xticks([])
+    plt.yticks([])    
+    
+    plt.subplot(3,3,i*3+3)
+    plt.imshow(images[i*3+2],cmap = 'gray')
+    plt.title(titles[i*3+2])
+    plt.xticks([])
+    plt.yticks([])
+plt.show()
+# %%
+# 이미지 필터링(Image Filtering) : cv2.filter2D()
+url = 'https://cdn.pixabay.com/photo/2020/10/01/09/35/bee-5618012_960_720.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('bee.jpg')
+# %%
+img = cv2.imread('./image/bee.jpg')
+img.shape
+# %%
+img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+# %%
+plt.imshow(img)
+plt.show
+# %% readme2 읽기
+kernel = np.ones((5,5),np.float32)/(25) # 5,5 크기의 넘파이 배열, 전부 1로 채움(ones)
+# %%
+print(kernel.shape)
+# %%
+print(kernel)
+# %%
+dst = cv2.filter2D(img,-1,kernel)
+# %%
+plt.imshow(dst)
+plt.show()
+# %%
+img = cv2.imread('./image/bee.jpg')
+img.shape
+# %%
+img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+# %%
+plt.imshow(img)
+plt.show()
+# %%
+kernel = [0,-1,0,
+          -1,5,-1,  #가운데 5 / 주위 -1/ 전체 합 1이 되어야함
+          0,-1,0]
+
+mask = np.array(kernel,np.float32).reshape(3,3)
+sharpen = cv2.filter2D(img,-1,mask)
+# %%
+plt.imshow(sharpen)
+plt.show()
+# %%
+kernel = [-1,-1,-1,
+          -1,9,-1,  #가운데 5 / 주위 -1/ 전체 합 1이 되어야함
+          -1,-1,-1]
+
+mask = np.array(kernel,np.float32).reshape(3,3)
+sharpen = cv2.filter2D(img,-1,mask)
+# %%
+plt.imshow(sharpen)
+plt.show()
+# %%
+img = cv2.imread('./image/bee.jpg')
+img.shape
+# %%
+img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+# %%
+plt.title('Original')
+plt.imshow(img)
+plt.show()
+# %%
+dst1 = cv2.blur(img,(7,7))
+# %%
+plt.title('Averaging Blurring')
+plt.imshow(dst1)
+plt.show()
+# %%
+plt.title('Original')
+plt.imshow(img)
+plt.show()
+# %%
+dst2 = cv2.GaussianBlur(img,(5,5),0)
+# %%
+plt.title('GaussianBlur') #깔끔 블러
+plt.imshow(dst2)
+plt.show()
+# %%
+plt.title('Original')
+plt.imshow(img)
+plt.show()
+# %%
+dst3 = cv2.medianBlur(img,9) # 흐릿한 정도 필터는 홀수만 가능 <대칭성 위해>
+# %%
+plt.title('MedianBlur')
+plt.imshow(dst3)
+plt.show()
+# %%
+plt.title('Original')
+plt.imshow(img)
+plt.show()
+# %% 경계선 유지
+dst4 = cv2.bilateralFilter(img,9,75,75)
+# %%
+plt.title('BilateralFilering')
+plt.imshow(dst4)
+plt.show()
+# %% 전체비교
+plt.figure(figsize=(14,16))
+images = [img,dst1,dst2,dst3,dst4]
+titles=['Original','Blur(7x7)','Gaussian Blur(5x5)',
+       'Median Blur','Bilateral']
+for i in range(5):
+    plt.subplot(3,2,i+1)
+    plt.imshow(images[i])
+    plt.title(titles[i])
+    plt.xticks([])
+    plt.yticks([])
+
+plt.show()
+# %%
+url = 'https://docs.opencv.org/4.5.2/j.png'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('j.png')
+# %%
+img = cv2.imread('./image/j.png')
+img.shape
+# %%
+cv2.imshow('', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# %% erosion = 침식
+kernel = np.ones((5,5),np.uint8)
+erosion = cv2.erode(img,kernel,iterations=1)
+cv2.imshow('', erosion)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# %% dilation = 팽창
+dilation = cv2.dilate(img,kernel,iterations=1)
+cv2.imshow('', dilation)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# %%
+url = 'https://docs.opencv.org/4.5.2/opening.png'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('opening.png')
+#%%
+url = 'https://docs.opencv.org/4.5.2/closing.png'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('closing.png')
+# %%
+opening = cv2.imread('./image/opening.png')
+plt.imshow(opening)
+plt.show()
+# %%
+opening = cv2.morphologyEx(opening,cv2.MORPH_OPEN,kernel)
+plt.imshow(opening)
+plt.show()
+# %%
+closing = cv2.imread('./image/closing.png')
+plt.imshow(closing)
+plt.show()
+# %%
+closing = cv2.morphologyEx(closing,cv2.MORPH_CROSS,kernel)
+plt.imshow(closing)
+plt.show()
+# %%
+gradient = cv2.morphologyEx(img,cv2.MORPH_GRADIENT,kernel)
+plt.imshow(gradient)
+plt.show()
+# %%
+tophat = cv2.morphologyEx(img,cv2.MORPH_TOPHAT,kernel)
+plt.imshow(tophat)
+plt.show()
+# %%
+blackhat = cv2.morphologyEx(img,cv2.MORPH_BLACKHAT,kernel)
+plt.imshow(blackhat)
+plt.show()
+# %%
+kernel = np.ones((5,5),np.uint8)
+# %%
+kernel
+# %%
+rect_kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(5,5))
+rect_kernel
+# %%
+ellipse_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
+ellipse_kernel
+# %%
+cross_kernel = cv2.getStructuringElement(cv2.MORPH_CROSS,(5,5))
+cross_kernel
+# %%
+gradient = cv2.morphologyEx(img,cv2.MORPH_GRADIENT,rect_kernel)
+plt.imshow(gradient)
+# %%
+gradient = cv2.morphologyEx(img,cv2.MORPH_GRADIENT,ellipse_kernel)
+plt.imshow(gradient)
+# %%
+gradient = cv2.morphologyEx(img,cv2.MORPH_GRADIENT,cross_kernel)
+plt.imshow(gradient)
+# %%
+url = 'https://cdn.pixabay.com/photo/2020/02/20/19/48/travel-4865665_960_720.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('travel.jpg')
+# %%
+img = cv2.imread('./image/travel.jpg',0)
+print(img.shape)
+# %%
+plt.imshow(img,cmap='gray')
+plt.show()
+# %%
+sobelx = cv2.Sobel(img,cv2.CV_8U,1,0,ksize=3)
+# %%
+plt.imshow(sobelx,cmap='gray')
+plt.show()
+# %%
+sobely = cv2.Sobel(img,cv2.CV_8U,0,1,ksize=3)
+plt.imshow(sobely,cmap='gray')
+plt.show()
+# %%
+sobelx2 = cv2.Sobel(img,cv2.CV_64F,1,0,ksize=5)
+# %%
+plt.imshow(sobelx2,cmap='gray')
+plt.show()
+# %%
+sobely2 = cv2.Sobel(img,cv2.CV_64F,0,1,ksize=5)
+plt.imshow(sobely2,cmap='gray')
+plt.show()
+# %%
+plt.imshow(img,cmap='gray')
+plt.show()
+# %%
+laplacian = cv2.Laplacian(img,cv2.CV_8U)
+# %%
+plt.imshow(laplacian,cmap='gray')
+plt.show()
+# %%
+laplacian2 = cv2.Laplacian(img,cv2.CV_64F)
+plt.imshow(laplacian2,cmap='gray')
+plt.show()
+# %%
+###Canny Edge Detection
+### 가장 경계선 탐지 잘됨
+
+plt.imshow(img,cmap='gray')
+plt.show()
+# %%
+canny = cv2.Canny(img,30,70)
+plt.imshow(canny,cmap='gray')
+plt.show()
+# %%
