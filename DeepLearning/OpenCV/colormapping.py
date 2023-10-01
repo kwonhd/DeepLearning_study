@@ -502,3 +502,266 @@ cv2.imshow('', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 # %%
+x = np.uint8([250])
+y = np.uint8([10])
+# %% cv2.add() 연산
+print(cv2.add(x,y)) #최대값 255 넘으면 255로
+# %%
+print(x+y) # 260을 최대값 256으로 나눈 나머지 값
+# %%
+url = 'https://cdn.pixabay.com/photo/2021/01/26/17/18/cavalier-king-charles-spaniel-5952324_960_720.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('dog2.jpg')
+#%%
+url = 'https://cdn.pixabay.com/photo/2017/09/25/13/14/dog-2785077_960_720.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('dog3.jpg')
+# %%
+dog2 = cv2.imread('./dog2.jpg',cv2.IMREAD_COLOR)
+print(dog2.shape)
+# %%
+dog3 = cv2.imread('./dog3.jpg',cv2.IMREAD_COLOR)
+print(dog3.shape)
+# %% add연산
+result1 = cv2.add(dog2,dog3)
+# %%
+cv2.imshow('', result1)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# %%넘파이 연산
+result2 =dog2+dog3
+# %%
+cv2.imshow('', result2)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# %%
+url = 'https://static.vecteezy.com/system/resources/previews/000/440/202/original/star-vector-icon.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('star.jpg')
+
+# %%
+star = cv2.imread('./star.jpg',cv2.IMREAD_COLOR)
+print(star.shape)
+# %%
+plt.imshow(star)
+plt.show()
+# %%
+black_img = np.zeros((5120,5120,3))
+# %%
+plt.imshow(black_img)
+plt.show()
+# %%
+black_img[:,:2560,:] = (255,255,255)
+# %%
+img = black_img.astype(np.uint8)
+#%%
+plt.imshow(img)
+plt.show()
+# %% bitwise_and 연산
+result = cv2.bitwise_and(img,star)
+# %%
+plt.imshow(result)
+plt.show()
+# %% bitwise_or 연산
+result2 = cv2.bitwise_or(img,star)
+# %%
+plt.imshow(result2)
+plt.show()
+# %%
+result3 = cv2.bitwise_not(img)
+# %%
+plt.imshow(result3)
+plt.show()
+#%%
+result4 = cv2.bitwise_not(star)
+# %%
+plt.imshow(result4) # 색 반전
+plt.show()
+# %%
+result5 = cv2.bitwise_xor(star,img)
+# %%
+plt.imshow(result5) # T T > F // F F > T
+plt.show()
+# %%
+temp_star = cv2.bitwise_not(star)
+result6 = cv2.bitwise_xor(temp_star,img)
+plt.imshow(result6)
+plt.show()
+#%%
+url = 'https://cdn.pixabay.com/photo/2015/01/07/15/51/woman-591576_1280.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('sunset.jpg')
+# %%
+url = 'https://velog.velcdn.com/images/checking_pks/post/8cfd2fcc-35dd-474c-a5e4-5ac6ad3477f1/image.png'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('opencv.png')
+# %%
+sunset = cv2.imread('./sunset.jpg')
+print(sunset.shape)
+#%%
+cv2.imshow('', sunset)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# %%
+opencv = cv2.imread('./opencv.png')
+print(opencv.shape)
+# %%
+cv2.imshow('', opencv)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# %%
+rows, cols, channels = sunset.shape
+opencv = cv2.resize(opencv, (cols, rows))
+# %%
+opencv.shape
+# %%
+opencv_gray = cv2.cvtColor(opencv,cv2.COLOR_BGR2GRAY)
+plt.imshow(opencv_gray, cmap='gray')
+plt.show()
+# %%
+ret, mask = cv2.threshold(opencv_gray,200,255,cv2.THRESH_BINARY_INV)
+mask_inv = cv2.bitwise_not(mask)
+# %%
+plt.imshow(mask, cmap='gray')
+plt.show()
+# %%
+plt.imshow(mask_inv, cmap='gray')
+plt.show()
+# %%
+img1_fg = cv2.bitwise_and(opencv,opencv,mask=mask) # 로고 빼고 나머지 검은색
+img2_bg = cv2.bitwise_and(sunset,sunset,mask=mask_inv)
+# %%
+dst = cv2.add(img1_fg,img2_bg)
+# %%
+cv2.imshow('', dst)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# %%
+sunset[0:rows,0:cols] = dst
+# %%
+cv2.imshow('', sunset)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# %%
+url = 'https://cdn.pixabay.com/photo/2013/07/13/12/42/do-not-copy-160137_1280.png'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('do-not-copy.png')
+# %%
+url = 'https://cdn.pixabay.com/photo/2020/06/20/12/55/fashion-5320934_960_720.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('fashion.jpg')
+# %%
+img1 = cv2.imread('./fashion.jpg')
+img1 = cv2.cvtColor(img1,cv2.COLOR_BGR2RGB)
+
+img2 = cv2.imread('./do-not-copy.png')
+img2 = cv2.cvtColor(img2,cv2.COLOR_BGR2RGB)
+#%%
+img2 = cv2.imread('./do-not-copy.png')
+
+# 원본 이미지를 복사합니다.
+result_img = img2.copy()
+
+# 원본 이미지에서 붉은색 글씨 부분을 추출합니다.
+red_mask = cv2.inRange(img2, (0, 0, 200), (50, 50, 255))
+
+# 검은색 배경을 흰색으로 변경합니다.
+result_img[red_mask == 0] = [255, 255, 255]
+
+# 전처리된 이미지를 파일로 저장합니다.
+cv2.imwrite('result_image.png', result_img)
+#%%
+img2 = cv2.imread('./result_image.png')
+img2 = cv2.cvtColor(img2,cv2.COLOR_BGR2RGB)
+#%%
+print(img1.shape)
+plt.imshow(img1)
+plt.show()
+
+# %% 사진 사이즈 동일하게
+img1 = cv2.resize(img1,(640,640))
+img2 = cv2.resize(img2,(640,640))
+# %%
+print(img1.shape)
+plt.imshow(img1)
+plt.show()
+# %%
+print(img2.shape)
+plt.imshow(img2)
+plt.show()
+
+# %%
+blended = cv2.addWeighted(src1=img1, alpha=0.5,src2=img2, beta=0.5,gamma=0) # 반반적용
+# %%
+plt.imshow(blended) # 두 이미지가 겹쳐 하나의 이미지
+plt.show()
+# %%
+blended2 = cv2.addWeighted(src1=img1, alpha=0.8,src2=img2, beta=0.1,gamma=0) 
+plt.imshow(blended2) 
+plt.show()
+# %%
+url = 'https://cdn.pixabay.com/photo/2018/09/26/09/07/education-3704026_960_720.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('letters.jpg')
+# %%
+img = cv2.imread('./letters.jpg',0)
+img.shape
+# %%
+plt.imshow(img,cmap='gray')
+plt.show()
+# %%
+ret, thresh1 = cv2.threshold(img,128,255,cv2.THRESH_BINARY)
+ret, thresh2 = cv2.threshold(img,128,255,cv2.THRESH_BINARY_INV)
+ret, thresh3 = cv2.threshold(img,128,255,cv2.THRESH_TRUNC)
+ret, thresh4 = cv2.threshold(img,128,255,cv2.THRESH_TOZERO)
+ret, thresh5 = cv2.threshold(img,128,255,cv2.THRESH_TOZERO_INV)
+# %%
+titles=['Origin','Bin','Bin_inv','trunc','tozero','tozero_inv']
+images = [img,thresh1,thresh2,thresh3,thresh4,thresh5]
+# %%
+plt.figure(figsize=(14,8))
+for i in range(6):
+    plt.subplot(2,3,i+1)
+    plt.imshow(images[i],'gray')
+    plt.title(titles[i])
+    plt.xticks([])
+    plt.yticks([])
+    
+plt.show()
+# %%
+url = 'https://cdn.pixabay.com/photo/2014/12/02/22/05/snowflakes-554635_960_720.jpg'
+response = requests.get(url)
+pic = Image.open(BytesIO(response.content))
+pic.save('snow.jpg')
+# %%
+img2 = cv2.imread('./snow.jpg',0)
+img2.shape
+# %%
+ret, thresh1 = cv2.threshold(img2,128,255,cv2.THRESH_BINARY)
+ret, thresh2 = cv2.threshold(img2,128,255,cv2.THRESH_BINARY_INV)
+ret, thresh3 = cv2.threshold(img2,128,255,cv2.THRESH_TRUNC)
+ret, thresh4 = cv2.threshold(img2,128,255,cv2.THRESH_TOZERO)
+ret, thresh5 = cv2.threshold(img2,128,255,cv2.THRESH_TOZERO_INV)
+# %%
+titles=['Origin','Bin','Bin_inv','trunc','tozero','tozero_inv']
+images = [img2,thresh1,thresh2,thresh3,thresh4,thresh5]
+# %%
+plt.figure(figsize=(14,7))
+for i in range(6):
+    plt.subplot(2,3,i+1)
+    plt.imshow(images[i],'gray')
+    plt.title(titles[i])
+    plt.xticks([])
+    plt.yticks([])
+    
+plt.show()
+# %%

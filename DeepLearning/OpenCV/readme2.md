@@ -207,3 +207,82 @@
 #이미지 ROI
     - 이미지 작업시에는 특정 pixel단위 보다는 특정 영역단위로 작업을 하게 되는데 이것을 Region of Image(ROI)라고 함
     - ROI 설정은 Numpy의 indexing을 사용, 특정 영역을 copy 할 수도 있음
+
+# 이미지 더하기
+    - cv2.add()
+    - cv2.addWeighted()
+    - Numpy 더하기 연산
+    - cv2.add() : Saturation 연산
+
+        - Saturation 연산은 한계값을 정하고 그 값을 벗어나는 경우는 모두 특정 값으로 계산하는 방식
+        - 이미지에서는 0이하는 모두 0, 255이상은 모두 255로 표현
+    - Numpy : modulo 연산
+        - a와 b는 n으로 나눈 나머지 값이 같다라는 의미
+        - 이미지에서는 연산의 결과가 256보다 큰 경우는 256으로 나눈 나머지 값으로 결정
+
+# 비트 연산
+    - AND, OR, NOT, XOR 연산
+        - bitwise_and : 둘다 0이 아닌 경우만 값을 통과
+        - bitwise_or : 둘중 하나가 0이 아니면 값을 통과
+        - bitwise_not : 해당 값에 대해 부정값을 통과
+        - bitwise_xor : 두 요소의 논리적 배타값 통과
+
+# 이미지 블렌딩(Image Blending) : cv2.addWeighted()
+    - 두 이미지를 blending 할 수 있음
+    - blending 하려는 두 이미지의 사이즈가 같아야함
+    - [Simple Formula]
+        - g(x)=(1−α)f0(x)+αf1(x) 
+        - β=1−α 
+        -α,β  의 값을 통해 어떤 이미지를 더 강하게 드러내고, 어떤 이미지를 더 약하게 드러낼지 결정
+        - γ  추가 가능 (optional)
+
+# 이미지 이진화 (Image Thesholding)
+
+# 기본 임계 처리 : cv2.threshold()
+
+    - 이진화 : 영상을 흑/백으로 분류하여 처리하는 것
+        - 기준이 되는 임계값을 어떻게 결정할 것인지가 중요한 문제
+        - 임계값보다 크면 백, 작으면 흑이 되는데, 기본 임계처리는 사용자가 고정된 임계값을 결정하고 그 결과를 보여주는 단순한 형태
+        기본적으로 이미지의 segmenting의 가장 간단한 방법
+
+|파라미터|설명|
+|-------|-------|
+|src|	input image로 single-channel 이미지.(grayscale 이미지)|
+|thresh|	임계값|
+|maxval|	임계값을 넘었을 때 적용할 value|
+|type|	thresholding type|
+
+
+    - thresholding type
+        - cv2.THRESH_BINARY
+            - src(x, y) > thresh 일 때, maxval
+            - 그 외, 0
+        - cv2.THRESH_BINARY_INV
+            - src(x, y) > thresh 일 때, 0
+            - 그 외, maxval
+        - cv2.THRESH_TRUNC
+            - src(x, y) > thresh 일 때, thresh
+            - 그 외, src(x, y)
+        - cv2.THRESH_TOZERO
+            - src(x, y) > thresh 일 때, src(x, y)
+            - 그 외, 0
+        - cv2.THRESH_TOZERO_INV
+            - src(x, y) > thresh 일 때, 0
+            - 그 외, src(x, y)
+
+# 적응 임계처리
+cv2.adaptiveThreshold()
+
+    이전 단계에서는 임계값을 이미지 전체에 적용하여 처리하기 때문에
+    하나의 이미지에 음영이 다르면 일부 영역이 모두 흰색 또는 검정색으로 보여지게 됨
+    이런 문제를 해결하기 위해서 이미지의 작은 영역별로 thresholding
+파라미터	설명
+src	grayscale image
+maxValue	임계값
+adaptiveMethod	thresholding value를 결정하는 계산 방법
+thresholdType	threshold type
+blockSize	thresholding을 적용할 영역 사이즈
+C	평균이나 가중평균에서 차감할 값
+Adaptive Method
+cv2.ADAPTIVE_THRESH_MEAN_C : 주변영역의 평균값으로 결정
+cv2.ADAPTIVE_THRESH_GAUSSIAN_C : 주변영역의 가우시안 값으로 결정
